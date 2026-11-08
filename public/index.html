@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>What's Cooking?</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg:#0f0f0f;--surf:#1a1a1a;--card:#1f1f1f;--border:#2a2a2a;
+  --accent:#94a3b8;--text:#f0f0f0;--muted:#666;--sub:#999;
+  --tag-bg:#1e2330;--tag-brd:#3e4a5e;--red:#ef4444;--green:#22c55e;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+    }
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){
+  --bg:#f8f7f4;--surf:#fff;--card:#fff;--border:#e8e5e0;
+  --text:#1a1a1a;--muted:#aaa;--sub:#888;--tag-bg:#f1f5f9;--tag-brd:#cbd5e1;
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100%;}
+
+    /* HERO */
+.hero{padding:72px 24px 56px;text-align:center;border-bottom:1px solid var(--border);}
+.hero-eyebrow{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,7vw,5rem);font-weight:700;line-height:1.05;letter-spacing:-0.02em;margin-bottom:16px;}
+h1 em{font-style:italic;color:var(--accent);font-weight:500;}
+.hero-sub{font-size:1.05rem;color:var(--sub);font-weight:300;max-width:400px;margin:0 auto;}
+
+    /* MAIN */
+.wrap{max-width:800px;margin:0 auto;padding:48px 20px 80px;}
+
+    /* SEARCH CARD */
+.scard{background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:28px 28px 24px;}
+.lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:500;margin-bottom:8px;display:block;}
+.tagbox{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:7px;min-height:50px;align-items:center;cursor:text;transition:border-color .2s;margin-bottom:8px;}
+.tagbox:focus-within{border-color:var(--accent);}
+.tag{background:var(--tag-bg);border:1px solid var(--tag-brd);color:var(--accent);font-size:0.8rem;padding:4px 10px 4px 12px;border-radius:100px;display:flex;align-items:center;gap:5px;font-weight:500;}
+.tx{background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;line-height:1;padding:0;}
+.tx:hover{color:var(--red);}
+#ii{background:none;border:none;outline:none;color:var(--text);font-size:0.9rem;font-family:'DM Sans',sans-serif;flex:1;min-width:130px;padding:2px;}
+#ii::placeholder{color:var(--muted);}
+.hint{font-size:0.71rem;color:var(--muted);margin-bottom:20px;}
+
+    /* QUICK ADD */
+    .qlbl {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .qrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .qc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--sub);
+      font-size: 0.76rem;
+      padding: 5px 13px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .qc:hover,
+    .qc.on {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--tag-bg);
+    }
+
+    /* DIET */
+    .drow {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .dp {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      color: var(--sub);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .15s;
+    }
+
+    .dp.on {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--tag-bg);
+      font-weight: 500;
+    }
+
+    /* BTN */
+    #fb {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      letter-spacing: 0.01em;
+    }
+
+    #fb:hover {
+      opacity: .88;
+    }
+
+    #fb:active {
+      transform: scale(.99);
+    }
+
+    #fb:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+
+    /* RESULTS */
+    #res {
+      margin-top: 36px;
+    }
+
+    .rhdr {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .rhdr b {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .dgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .dc {
+      background: var(--card);
+      padding: 22px;
+      cursor: default;
+      transition: background .15s;
+      animation: fu .3s ease both;
+    }
+
+    .dc:nth-child(2) {
+      animation-delay: .04s
+    }
+
+    .dc:nth-child(3) {
+      animation-delay: .08s
+    }
+
+    .dc:nth-child(4) {
+      animation-delay: .12s
+    }
+
+    .dc:nth-child(5) {
+      animation-delay: .16s
+    }
+
+    .dc:nth-child(6) {
+      animation-delay: .20s
+    }
+
+    .dc:nth-child(7) {
+      animation-delay: .24s
+    }
+
+    .dc:nth-child(8) {
+      animation-delay: .28s
+    }
+
+    .dc:hover {
+      background: var(--surf);
+    }
+
+    @keyframes fu {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .dtop {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .dn {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.25;
+      flex: 1;
+      padding-right: 10px;
+    }
+
+    .dmatch {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .mh {
+      background: #1e2a1e;
+      color: #86efac;
+      border: 1px solid #2d4a2d;
+    }
+
+    .mm {
+      background: #252530;
+      color: #94a3b8;
+      border: 1px solid #3e4a5e;
+    }
+
+    @media(prefers-color-scheme:light) {
+      :root:not([data-theme=dark]) {
+        .mh {
+          background: #f0fdf4;
+          color: #15803d;
+          border-color: #bbf7d0;
+        }
+
+        .mm {
+          background: #f1f5f9;
+          color: #475569;
+          border-color: #cbd5e1;
+        }
+      }
+    }
+
+    .dmeta {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 0.66rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 500;
+      border: 1px solid;
+    }
+
+    .bt {
+      color: #4ade80;
+      border-color: #1a4a28;
+      background: #082032;
+    }
+
+    .bd {
+      color: #60a5fa;
+      border-color: #1d3a6e;
+      background: #0d1a30;
+    }
+
+    .bc {
+      color: #c084fc;
+      border-color: #4a1d7e;
+      background: #1a0d30;
+    }
+
+    @media(prefers-color-scheme:light) {
+      :root:not([data-theme=dark]) {
+        .bt {
+          color: #15803d;
+          border-color: #bbf7d0;
+          background: #f0fdf4;
+        }
+
+        .bd {
+          color: #1d4ed8;
+          border-color: #bfdbfe;
+          background: #eff6ff;
+        }
+
+        .bc {
+          color: #7e22ce;
+          border-color: #e9d5ff;
+          background: #faf5ff;
+        }
+      }
+    }
+
+    .dd {
+      font-size: 0.8rem;
+      color: var(--sub);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-weight: 300;
+    }
+
+    .ir {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .ih {
+      color: var(--accent);
+      border: 1px solid var(--tag-brd);
+      background: var(--tag-bg);
+      font-size: 0.67rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+
+    .in {
+      color: #f87171;
+      border: 1px solid #7f1d1d;
+      background: #200a0a;
+      font-size: 0.67rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+
+    @media(prefers-color-scheme:light) {
+      :root:not([data-theme=dark]) {
+        .in {
+          color: #dc2626;
+          border-color: #fca5a5;
+          background: #fef2f2;
+        }
+      }
+    }
+
+    .nomatch {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .nomatch span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    @media(max-width:480px) {
+      h1 {
+        font-size: 2.4rem;
+      }
+
+      .scard {
+        padding: 20px;
+      }
+
+      .hero {
+        padding: 52px 20px 40px;
+      }
+    }
+
+    /* ── RECIPE MODAL ─────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .modal {
+      background: var(--surf);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 680px;
+      width: 100%;
+      margin: auto;
+      padding: 32px;
+      position: relative;
+      animation: modalIn .25s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: var(--border);
+    }
+
+    .modal-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding-right: 40px;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .modal-desc {
+      color: var(--sub);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .modal-section {
+      margin-bottom: 24px;
+    }
+
+    .modal-section-title {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .modal-ingredients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-step {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .modal-step-num {
+      background: var(--accent);
+      color: #fff;
+      min-width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .modal-step-text {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .modal-extra {
+      font-size: 0.78rem;
+      color: var(--sub);
+      margin-top: 8px;
+    }
+
+    .modal-extra span {
+      color: #f87171;
+    }
+
+    .no-instructions {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero">
+    <p class="hero-eyebrow">35+ recipes · no account needed</p>
+    <h1>What can I cook<br><em>tonight?</em></h1>
+    <p class="hero-sub">Add what's in your kitchen and find out what you can make.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="scard">
+      <label class="lbl" for="ii">Ingredients you have</label>
+      <div class="tagbox" id="tw" onclick="document.getElementById('ii').focus()">
+        <input type="text" id="ii" placeholder="e.g. onion, tomato, rice…" autocomplete="off">
+      </div>
+      <p class="hint">Press <b>Enter</b> or <b>,</b> to add &nbsp;·&nbsp; Backspace removes last</p>
+
+      <div class="qlbl">Quick add</div>
+      <div class="qrow" id="qrow"></div>
+
+      <label class="lbl">Diet</label>
+      <div class="drow" id="drow">
+        <button class="dp on" data-d="any">Any</button>
+        <button class="dp" data-d="vegetarian">Vegetarian</button>
+        <button class="dp" data-d="vegan">Vegan</button>
+        <button class="dp" data-d="gluten-free">Gluten-free</button>
+        <button class="dp" data-d="non-veg">Non-veg</button>
+      </div>
+
+      <button id="fb" onclick="go()" disabled>Add ingredients to search</button>
+    </div>
+
+    <div id="res"></div>
+  </div>
+
+  <script>
+    const DISHES = [
+      {
+        id: 'neer-dosa', name: 'Neer Dosa', cuisine: 'Mangalorean', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Paper-thin silky rice crepes from a watery batter. Serve fresh off the griddle with chutney.',
+        tags: ['rice flour', 'water', 'salt', 'coconut oil'], need: ['coconut oil']
+      },
+
+      {
+        id: 'golibaje', name: 'Golibaje', cuisine: 'Mangalorean', time: '25 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Crispy golden fritters of maida and coconut — a beloved tea-time snack.',
+        tags: ['maida', 'flour', 'coconut', 'curd', 'yogurt', 'green chilli', 'ginger', 'baking soda'], need: ['oil']
+      },
+
+      {
+        id: 'kori-rotti', name: 'Kori Rotti', cuisine: 'Tulu Nadu', time: '50 min', diff: 'Medium',
+        diet: ['non-veg'],
+        desc: 'Crispy rice crackers drenched in fiery chicken curry — a classic of the Bunt community.',
+        tags: ['chicken', 'coconut', 'onion', 'tomato', 'red chilli', 'coriander', 'turmeric', 'garlic'], need: ['kori rotti crackers']
+      },
+
+      {
+        id: 'mangalore-buns', name: 'Mangalore Buns', cuisine: 'Mangalorean', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Fluffy deep-fried banana bread rolls — a breakfast favourite, best with coconut chutney.',
+        tags: ['banana', 'maida', 'flour', 'sugar', 'curd', 'yogurt', 'cumin', 'baking soda'], need: ['oil']
+      },
+
+      {
+        id: 'fish-curry', name: 'Fish Curry', cuisine: 'Coastal Karnataka', time: '35 min', diff: 'Medium',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Bold tangy coconut curry with kokum and roasted spices — made with fresh catch of the day.',
+        tags: ['fish', 'coconut', 'onion', 'tomato', 'red chilli', 'turmeric', 'kokum', 'tamarind', 'ginger', 'garlic'], need: ['curry leaves']
+      },
+
+      {
+        id: 'chicken-ghee-roast', name: 'Chicken Ghee Roast', cuisine: 'Mangalorean', time: '50 min', diff: 'Medium',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Intensely spiced dry chicken slow-roasted in clarified butter — smoky, rich and deeply flavoured.',
+        tags: ['chicken', 'ghee', 'butter', 'red chilli', 'garlic', 'tamarind', 'pepper', 'cumin', 'coriander'], need: ['curry leaves', 'jaggery']
+      },
+
+      {
+        id: 'prawn-sukka', name: 'Prawn Sukka', cuisine: 'Coastal Karnataka', time: '30 min', diff: 'Easy',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Dry-spiced prawns tossed with fresh grated coconut and curry leaves — quick and full of flavour.',
+        tags: ['prawns', 'shrimp', 'coconut', 'onion', 'red chilli', 'turmeric', 'curry leaves', 'garlic'], need: ['coriander seeds']
+      },
+
+      {
+        id: 'kane-fry', name: 'Kane Fry', cuisine: 'Mangalorean', time: '20 min', diff: 'Easy',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Lady fish in a fiery red chilli-turmeric marinade, coated in semolina and shallow-fried till crisp.',
+        tags: ['fish', 'red chilli', 'turmeric', 'garlic', 'semolina', 'rava', 'lemon', 'ginger'], need: ['oil']
+      },
+
+      {
+        id: 'bangude-pulimunchi', name: 'Bangude Pulimunchi', cuisine: 'Tulu Nadu', time: '40 min', diff: 'Medium',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Mackerel in a sour-spicy tamarind-chilli gravy. Pulimunchi means sour-spicy — it delivers on both.',
+        tags: ['mackerel', 'fish', 'tamarind', 'red chilli', 'onion', 'garlic', 'turmeric', 'pepper'], need: ['kokum']
+      },
+
+      {
+        id: 'pathrade', name: 'Pathrade', cuisine: 'Coastal Karnataka', time: '60 min', diff: 'Hard',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Taro leaves spread with spiced rice-coconut paste, rolled and steamed — a monsoon delicacy.',
+        tags: ['colocasia', 'taro', 'rice flour', 'coconut', 'red chilli', 'tamarind', 'jaggery'], need: ['turmeric leaf']
+      },
+
+      {
+        id: 'coconut-chutney', name: 'Coconut Chutney', cuisine: 'South Indian', time: '10 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Fresh coconut blended with green chilli and ginger, tempered with mustard seeds and curry leaves.',
+        tags: ['coconut', 'green chilli', 'ginger', 'mustard seeds', 'curry leaves', 'coriander'], need: ['chana dal']
+      },
+
+      {
+        id: 'bangda-fry', name: 'Bangda Fry', cuisine: 'Mangalorean', time: '25 min', diff: 'Easy',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Whole mackerel in Mangalorean masala of red chillies, turmeric and garlic, pan-fried till crisp.',
+        tags: ['mackerel', 'fish', 'red chilli', 'turmeric', 'garlic', 'semolina', 'rava', 'lemon'], need: ['oil', 'salt']
+      },
+
+      {
+        id: 'idli-sambar', name: 'Idli Sambar', cuisine: 'South Indian', time: '40 min', diff: 'Medium',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Pillowy steamed rice cakes with a lentil-vegetable stew — the quintessential South Indian breakfast.',
+        tags: ['rice', 'urad dal', 'toor dal', 'lentil', 'onion', 'tomato', 'mustard seeds'], need: ['curry leaves', 'tamarind']
+      },
+
+      {
+        id: 'egg-fried-rice', name: 'Egg Fried Rice', cuisine: 'Indo-Chinese', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Wok-tossed rice with scrambled eggs, soy sauce and spring onions — quick, satisfying, done in 20.',
+        tags: ['egg', 'rice', 'onion', 'soy sauce', 'garlic', 'ginger', 'spring onion', 'carrot'], need: ['pepper']
+      },
+
+      {
+        id: 'dal-tadka', name: 'Dal Tadka', cuisine: 'North Indian', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Yellow lentils simmered until creamy, finished with a sizzling ghee-cumin-chilli tempering.',
+        tags: ['toor dal', 'moong dal', 'lentil', 'dal', 'onion', 'tomato', 'garlic', 'cumin', 'turmeric', 'red chilli'], need: ['ghee']
+      },
+
+      {
+        id: 'paneer-butter-masala', name: 'Paneer Butter Masala', cuisine: 'North Indian', time: '35 min', diff: 'Medium',
+        diet: ['vegetarian', 'gluten-free'],
+        desc: 'Soft cottage cheese in a velvety tomato-cashew gravy enriched with cream and warm spices.',
+        tags: ['paneer', 'cottage cheese', 'tomato', 'onion', 'cashew', 'cream', 'butter', 'garlic', 'ginger'], need: ['kasuri methi']
+      },
+
+      {
+        id: 'aloo-paratha', name: 'Aloo Paratha', cuisine: 'Punjabi', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Whole-wheat flatbreads stuffed with spiced mashed potato, pan-fried in butter. Perfect with yogurt.',
+        tags: ['potato', 'wheat flour', 'atta', 'onion', 'green chilli', 'coriander', 'cumin', 'butter', 'ghee'], need: ['ajwain']
+      },
+
+      {
+        id: 'chole-bhature', name: 'Chole Bhature', cuisine: 'North Indian', time: '50 min', diff: 'Medium',
+        diet: ['vegetarian'],
+        desc: 'Spiced chickpea curry with deep-fried fluffy bread — North India\'s ultimate weekend indulgence.',
+        tags: ['chickpeas', 'chole', 'chana', 'onion', 'tomato', 'garlic', 'ginger', 'maida', 'flour'], need: ['chole masala']
+      },
+
+      {
+        id: 'biryani', name: 'Chicken Biryani', cuisine: 'Hyderabadi', time: '60 min', diff: 'Hard',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Basmati layered with spiced chicken and saffron, slow-cooked dum style for maximum fragrance.',
+        tags: ['chicken', 'basmati rice', 'rice', 'onion', 'tomato', 'yogurt', 'curd', 'saffron', 'ghee', 'mint', 'coriander'], need: ['fried onion']
+      },
+
+      {
+        id: 'samosa', name: 'Samosa', cuisine: 'North Indian', time: '45 min', diff: 'Medium',
+        diet: ['vegetarian', 'vegan'],
+        desc: 'Crispy pastries stuffed with spiced potato and peas — the eternal king of Indian street snacks.',
+        tags: ['potato', 'pea', 'maida', 'flour', 'onion', 'green chilli', 'cumin', 'coriander'], need: ['ajwain', 'mango powder']
+      },
+
+      {
+        id: 'rasam', name: 'Rasam', cuisine: 'South Indian', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Thin, peppery, tangy lentil broth with tomatoes and tamarind — South India\'s soul soup.',
+        tags: ['toor dal', 'lentil', 'tomato', 'tamarind', 'pepper', 'cumin', 'garlic', 'mustard seeds'], need: ['curry leaves']
+      },
+
+      {
+        id: 'upma', name: 'Upma', cuisine: 'South Indian', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan'],
+        desc: 'Savoury semolina porridge tempered with mustard seeds, curry leaves and mixed vegetables.',
+        tags: ['semolina', 'rava', 'onion', 'green chilli', 'mustard seeds', 'curry leaves', 'ginger', 'carrot'], need: ['lemon']
+      },
+
+      {
+        id: 'poha', name: 'Poha', cuisine: 'Maharashtra', time: '15 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Flattened rice with turmeric, onion and peanuts tempered with curry leaves — light and quick.',
+        tags: ['poha', 'flattened rice', 'beaten rice', 'onion', 'peanut', 'mustard seeds', 'turmeric', 'curry leaves'], need: ['lemon']
+      },
+
+      {
+        id: 'tomato-rice', name: 'Tomato Rice', cuisine: 'South Indian', time: '25 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Tangy spiced rice with fresh tomatoes, tempered with curry leaves and mustard seeds.',
+        tags: ['rice', 'tomato', 'onion', 'mustard seeds', 'curry leaves', 'red chilli', 'turmeric', 'garlic'], need: ['sambar powder']
+      },
+
+      {
+        id: 'egg-curry', name: 'Egg Curry', cuisine: 'Indian', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian', 'gluten-free'],
+        desc: 'Boiled eggs in a rich onion-tomato masala — simple, protein-packed, great with rice or roti.',
+        tags: ['egg', 'onion', 'tomato', 'garlic', 'ginger', 'turmeric', 'red chilli', 'coriander'], need: ['garam masala']
+      },
+
+      {
+        id: 'banana-halwa', name: 'Banana Halwa', cuisine: 'South Indian', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian', 'gluten-free'],
+        desc: 'Ripe bananas cooked with ghee, jaggery and cardamom into a fudgy halwa — a quick sweet treat.',
+        tags: ['banana', 'milk', 'ghee', 'jaggery', 'sugar', 'cardamom', 'cashew'], need: []
+      },
+
+      {
+        id: 'veg-pulao', name: 'Vegetable Pulao', cuisine: 'Indian', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Fragrant basmati with whole spices, mixed vegetables and caramelised onions — one-pot weekday dinner.',
+        tags: ['rice', 'basmati rice', 'onion', 'carrot', 'pea', 'potato', 'cumin', 'bay leaf', 'ginger', 'garlic'], need: ['whole spices']
+      },
+
+      {
+        id: 'butter-chicken', name: 'Butter Chicken', cuisine: 'North Indian', time: '45 min', diff: 'Medium',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Tender chicken in a silky, mildly spiced tomato-cream sauce — everyone\'s favourite.',
+        tags: ['chicken', 'tomato', 'onion', 'cream', 'butter', 'garlic', 'ginger', 'yogurt', 'curd', 'garam masala'], need: ['kasuri methi']
+      },
+
+      {
+        id: 'pav-bhaji', name: 'Pav Bhaji', cuisine: 'Mumbai Street Food', time: '35 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Thick spiced vegetable mash with butter-toasted dinner rolls — Mumbai\'s iconic street meal.',
+        tags: ['potato', 'tomato', 'onion', 'pea', 'capsicum', 'bell pepper', 'carrot', 'butter', 'cauliflower'], need: ['pav buns', 'pav bhaji masala']
+      },
+
+      {
+        id: 'masala-chai', name: 'Masala Chai', cuisine: 'Indian', time: '10 min', diff: 'Easy',
+        diet: ['vegetarian'],
+        desc: 'Spiced milk tea simmered with ginger, cardamom and cloves — the drink that runs through India\'s veins.',
+        tags: ['milk', 'tea', 'ginger', 'cardamom', 'sugar', 'cinnamon', 'cloves', 'apple'], need: ['pepper']
+      },
+
+      {
+        id: 'khichdi', name: 'Khichdi', cuisine: 'Indian', time: '25 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Rice and lentils cooked into a comforting porridge with turmeric and cumin — India\'s comfort food.',
+        tags: ['rice', 'moong dal', 'lentil', 'dal', 'turmeric', 'cumin', 'ginger', 'onion'], need: ['ghee', 'asafoetida']
+      },
+
+      {
+        id: 'palak-paneer', name: 'Palak Paneer', cuisine: 'North Indian', time: '35 min', diff: 'Medium',
+        diet: ['vegetarian', 'gluten-free'],
+        desc: 'Cottage cheese in a smooth vibrant spinach gravy spiced with garlic, ginger and garam masala.',
+        tags: ['spinach', 'palak', 'paneer', 'cottage cheese', 'onion', 'tomato', 'garlic', 'ginger', 'cream'], need: ['garam masala']
+      },
+
+      {
+        id: 'gulab-jamun', name: 'Gulab Jamun', cuisine: 'Indian Sweets', time: '40 min', diff: 'Medium',
+        diet: ['vegetarian'],
+        desc: 'Soft spongy milk-solid dumplings soaked in rose-scented sugar syrup — the ultimate Indian dessert.',
+        tags: ['milk powder', 'khoya', 'mawa', 'maida', 'flour', 'ghee', 'sugar', 'cardamom'], need: ['rose water']
+      },
+
+      {
+        id: 'veg-noodles', name: 'Veg Hakka Noodles', cuisine: 'Indo-Chinese', time: '20 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan'],
+        desc: 'Stir-fried noodles with colourful vegetables in soy and vinegar — street-Chinese done right.',
+        tags: ['noodles', 'carrot', 'cabbage', 'onion', 'capsicum', 'bell pepper', 'soy sauce', 'garlic', 'ginger'], need: ['vinegar', 'chilli sauce']
+      },
+
+      {
+        id: 'mutton-curry', name: 'Mutton Curry', cuisine: 'Indian', time: '70 min', diff: 'Hard',
+        diet: ['non-veg', 'gluten-free'],
+        desc: 'Slow-cooked mutton in a deeply spiced onion-tomato gravy — rich, hearty and worth every minute.',
+        tags: ['mutton', 'lamb', 'onion', 'tomato', 'garlic', 'ginger', 'yogurt', 'curd', 'red chilli', 'coriander'], need: ['whole spices', 'garam masala']
+      },
+
+      {
+        id: 'veg-curry', name: 'Mixed Vegetable Curry', cuisine: 'Indian', time: '30 min', diff: 'Easy',
+        diet: ['vegetarian', 'vegan', 'gluten-free'],
+        desc: 'Seasonal vegetables simmered in a spiced tomato-onion gravy — simple, wholesome and versatile.',
+        tags: ['potato', 'carrot', 'pea', 'tomato', 'onion', 'garlic', 'ginger', 'turmeric', 'red chilli', 'coriander'], need: ['garam masala']
+      },
+
+      {
+        id: 'dahi-rice', name: 'Curd Rice', cuisine: 'South Indian', time: '15 min', diff: 'Easy',
+        diet: ['vegetarian', 'gluten-free'],
+        desc: 'Cooked rice mixed with fresh yogurt and tempered with mustard seeds, ginger and green chilli — cooling and comforting.',
+        tags: ['rice', 'curd', 'yogurt', 'mustard seeds', 'ginger', 'green chilli', 'curry leaves'], need: ['pomegranate', 'grapes']
+      },
+    ];
+
+    const QUICK = ['onion', 'tomato', 'garlic', 'rice', 'potato', 'egg', 'coconut', 'chicken', 'paneer', 'lentil', 'dal', 'ginger', 'fish', 'maida', 'banana'];
+
+    // ── STATE ──────────────────────────────────────────────────────────────
+    const tags = new Set(); let diet = 'any';
+    const inp = document.getElementById('ii'), tw = document.getElementById('tw'), fb = document.getElementById('fb');
+
+    // Quick chips
+    const qr = document.getElementById('qrow');
+    QUICK.forEach(q => {
+      const b = document.createElement('button'); b.className = 'qc'; b.textContent = q;
+      b.onclick = () => { addTag(q); b.classList.add('on'); };
+      qr.appendChild(b);
+    });
+
+    // Diet
+    document.getElementById('drow').addEventListener('click', e => {
+      if (!e.target.classList.contains('dp')) return;
+      document.querySelectorAll('.dp').forEach(p => p.classList.remove('on'));
+      e.target.classList.add('on'); diet = e.target.dataset.d;
+    });
+
+    // Input
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(inp.value.replace(',', '').trim()); }
+      if (e.key === 'Backspace' && inp.value === '' && tags.size > 0) removeTag([...tags].pop());
+    });
+    inp.addEventListener('input', () => { if (inp.value.endsWith(',')) addTag(inp.value.replace(',', '').trim()); });
+
+    function addTag(v) {
+      if (!v) return; const c = v.toLowerCase().trim();
+      if (c && !tags.has(c)) { tags.add(c); renderTags(); }
+      inp.value = ''; updateBtn();
+    }
+    function removeTag(v) { tags.delete(v); renderTags(); updateBtn(); }
+    function renderTags() {
+      tw.querySelectorAll('.tag').forEach(t => t.remove());
+      tags.forEach(t => {
+        const el = document.createElement('div'); el.className = 'tag';
+        el.innerHTML = `${t} <button class="tx" onclick="removeTag('${t}')">×</button>`;
+        tw.insertBefore(el, inp);
+      });
+    }
+    function updateBtn() {
+      if (tags.size === 0) { fb.disabled = true; fb.textContent = 'Add ingredients to search'; }
+      else { fb.disabled = false; fb.textContent = `Find dishes with ${tags.size} ingredient${tags.size > 1 ? 's' : ''} →`; }
+    }
+
+    // ── API CALL ────────────────────────────────────────────────────────────
+    async function go() {
+      if (tags.size === 0) return;
+      const res = document.getElementById('res');
+      res.innerHTML = `<div class="nomatch"><span style="font-size:1.8rem">⏳</span><br>Finding dishes...</div>`;
+      fb.disabled = true;
+      try {
+        const response = await fetch('/api/dishes/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ingredients: [...tags], diet })
+        });
+        const json = await response.json();
+        if (!json.success || json.data.length === 0) {
+          res.innerHTML = `<div class="nomatch"><span>🤔</span>No matches. Try <b>Any</b> diet or add more ingredients.</div>`;
+          fb.disabled = false; updateBtn(); return;
+        }
+        const cards = json.data.map(d => {
+          const ml = d.matchPercent >= 50 ? 'Great match' : 'Partial match';
+          const mc = d.matchPercent >= 50 ? 'mh' : 'mm';
+          return `<div class="dc" onclick="openRecipe('${d._id}')" style="cursor:pointer" title="Click to see recipe">
+        <div class="dtop"><div class="dn">${d.name}</div><span class="dmatch ${mc}">${ml}</span></div>
+        <div class="dmeta">
+          <span class="badge bt">⏱ ${d.time}</span>
+          <span class="badge bd">${d.difficulty}</span>
+          <span class="badge bc">${d.cuisine}</span>
+        </div>
+        <p class="dd">${d.description}</p>
+        <div class="ir">
+          ${d.matchedIngredients.map(i => `<span class="ih">✓ ${i}</span>`).join('')}
+          ${d.extraNeeded.map(i => `<span class="in">+ ${i}</span>`).join('')}
+        </div>
+        <div style="margin-top:10px;font-size:0.72rem;color:var(--accent);">Tap to view recipe →</div>
+      </div>`;
+        }).join('');
+        res.innerHTML = `<div class="rhdr">Showing <b>${json.count} dish${json.count > 1 ? 'es' : ''}</b> matching your ingredients</div>
+      <div class="dgrid">${cards}</div>`;
+        res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        res.innerHTML = `<div class="nomatch"><span>⚠️</span>Cannot connect to server. Make sure backend is running.</div>`;
+      }
+      fb.disabled = false; updateBtn();
+    }
+  </script>
+
+  <!-- RECIPE MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modalBox">
+      <button class="modal-close" onclick="closeRecipeModal()">✕</button>
+      <div class="modal-name" id="mName"></div>
+      <div class="modal-meta" id="mMeta"></div>
+      <p class="modal-desc" id="mDesc"></p>
+      <div class="modal-section">
+        <div class="modal-section-title">Ingredients</div>
+        <div class="modal-ingredients" id="mIngredients"></div>
+        <div class="modal-extra" id="mExtra"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">How to make it</div>
+        <div id="mSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openRecipe(id) {
+      fetch('/api/dishes/' + id)
+        .then(r => r.json())
+        .then(json => {
+          if (!json.success) return;
+          const d = json.data;
+          document.getElementById('mName').textContent = d.name;
+          document.getElementById('mDesc').textContent = d.description;
+          document.getElementById('mMeta').innerHTML = `
+        <span class="badge bt">⏱ ${d.time}</span>
+        <span class="badge bd">${d.difficulty}</span>
+        <span class="badge bc">${d.cuisine}</span>
+        ${d.diet.map(t => `<span class="badge" style="color:#a78bfa;border-color:#4c1d95;background:#1e0a3c">${t}</span>`).join('')}
+      `;
+          document.getElementById('mIngredients').innerHTML = d.ingredients.map(i =>
+            `<span class="ih">✓ ${i}</span>`).join('');
+          document.getElementById('mExtra').innerHTML = d.extraNeeded && d.extraNeeded.length
+            ? `<span>Also needed: </span>` + d.extraNeeded.map(e => `<span>${e}</span>`).join(', ')
+            : '';
+          const steps = d.instructions && d.instructions.length
+            ? d.instructions.map((s, i) => `<div class="modal-step"><div class="modal-step-num">${i + 1}</div><div class="modal-step-text">${s}</div></div>`).join('')
+            : '<p class="no-instructions">Recipe steps coming soon.</p>';
+          document.getElementById('mSteps').innerHTML = steps;
+          document.getElementById('modalOverlay').classList.add('open');
+          document.body.style.overflow = 'hidden';
+        })
+        .catch(() => alert('Could not load recipe. Make sure the server is running.'));
+    }
+    function closeRecipeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeModal(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeRecipeModal();
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRecipeModal(); });
+  </script>
+</body>
+
+</html>
