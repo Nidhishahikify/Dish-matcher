@@ -1,30 +1,28 @@
-# 🍳 What's Cooking? — Full Stack
+# 🍽️ Dish Matcher
 
-A recipe suggestion app built with **Node.js, Express and MongoDB**.  
-Users enter ingredients → backend matches and returns relevant dishes from the database.
+Dish Matcher is a web application designed to help users match available ingredients with delicious recipes, making home cooking quick, simple, and intuitive.
+
+## 🚀 Live Demo
+
+Check out the live application:  
+👉 **[https://dish-matcher.onrender.com/](https://dish-matcher.onrender.com/)**
 
 ---
 
-## 🗂 Project Structure
+## ✨ Features
 
-```
-whats-cooking-backend/
-├── server.js              ← Express app entry point
-├── config/
-│   └── db.js              ← MongoDB connection
-├── models/
-│   └── Dish.js            ← Mongoose schema
-├── routes/
-│   └── dishes.js          ← API routes
-├── data/
-│   └── seed.js            ← Seed 37 dishes into MongoDB
-├── public/
-│   └── index.html         ← Frontend (served by Express)
-├── .env.example
-├── .gitignore
-└── package.json
+- 🔍 **Ingredient-Based Search:** Find dishes based on what you already have in your kitchen.
+- 📜 **Recipe Details:** Access step-by-step cooking instructions and ingredient breakdowns.
+- ⚡ **Fast & Responsive UI:** Clean interface optimized for desktop and mobile devices.
+- 🌐 **Cloud Deployment:** Hosted seamlessly on Render.
 
-```
-## Live Demo:
-```
-** https://dish-matcher.onrender.com/ **
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript (or your preferred framework)
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas
+- **Hosting:** Render
+
+---
